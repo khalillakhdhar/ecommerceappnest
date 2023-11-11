@@ -40,6 +40,8 @@ export class ClientService {
     if(client!==undefined && client!== null)
     {
      this.clientRepository.delete((await client).id)
+     return "client deleted";
     }
+    else return "client not found"; 
   }
 }

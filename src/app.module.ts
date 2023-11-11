@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReclamationModule } from './reclamation/reclamation.module';
 import { ClientModule } from './client/client.module';
 import { CommandeModule } from './commande/commande.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CommandeModule } from './commande/commande.module';
     ReclamationModule,
     ClientModule,
     CommandeModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
