@@ -1,26 +1,45 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Client } from './entities/client.entity';
 
 @Injectable()
 export class ClientService {
-  create(createClientDto: CreateClientDto) {
-    return 'This action adds a new client';
+  constructor(
+    @InjectRepository(Client)
+    private clientRepository: Repository<Client>,
+  ) {}
+
+  async create(clientData: Partial<Client>): Promise<Client> {
+    const client = this.clientRepository.create(clientData);
+    return await this.clientRepository.save(client);
   }
 
-  findAll() {
-    return `This action returns all client`;
+  async findAll(): Promise<Client[]> {
+    return await this.clientRepository.find();
+  }
+  async findOne(id: number) {
+    return await this.clientRepository.findOne({
+      where: {id,},}); 
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
+  async update(id: number, updateClientDto: UpdateClientDto) {
+    const client =this.findOne(id);
+   if(client!==undefined && client!== null)
+   {
+    updateClientDto.id=(await client).id;
+  return  this.clientRepository.save(updateClientDto);
+   }
+   else return  "client not found"
   }
 
-  update(id: number, updateClientDto: UpdateClientDto) {
-    return `This action updates a #${id} client`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async remove(id: number) {
+    const client =this.findOne(id);
+    if(client!==undefined && client!== null)
+    {
+     this.clientRepository.delete((await client).id)
+    }
   }
 }
