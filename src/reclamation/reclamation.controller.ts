@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ReclamationService } from './reclamation.service';
 import { CreateReclamationDto } from './dto/create-reclamation.dto';
 import { UpdateReclamationDto } from './dto/update-reclamation.dto';
@@ -7,9 +15,12 @@ import { UpdateReclamationDto } from './dto/update-reclamation.dto';
 export class ReclamationController {
   constructor(private readonly reclamationService: ReclamationService) {}
 
-  @Post()
-  create(@Body() createReclamationDto: CreateReclamationDto) {
-    return this.reclamationService.create(createReclamationDto);
+  @Post(':id')
+  create(
+    @Body() createReclamationDto: CreateReclamationDto,
+    @Param('id') id: string,
+  ) {
+    return this.reclamationService.create(createReclamationDto, id);
   }
 
   @Get()
@@ -23,7 +34,10 @@ export class ReclamationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReclamationDto: UpdateReclamationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateReclamationDto: UpdateReclamationDto,
+  ) {
     return this.reclamationService.update(+id, updateReclamationDto);
   }
 

@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProduitDto } from './dto/create-produit.dto';
-import { UpdateProduitDto } from './dto/update-produit.dto';
+
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Produit } from './entities/produit.entity';
 
 @Injectable()
 export class ProduitService {
-  create(createProduitDto: CreateProduitDto) {
-    return 'This action adds a new produit';
+  constructor(
+    @InjectRepository(Produit)
+    private produitRepository: Repository<Produit>,
+  ) {}
+
+  async create(produitData: Partial<Produit>): Promise<Produit> {
+    const produit = this.produitRepository.create(produitData);
+    return await this.produitRepository.save(produit);
   }
 
-  findAll() {
-    return `This action returns all produit`;
+  async findAll(): Promise<Produit[]> {
+    return await this.produitRepository.find();
+  }
+  async findOne(id: number) {
+    return await this.produitRepository.findOne({
+      where: { id },
+    });
+  }
+  async update(id: number, produit: Produit) {
+    const cproduit = this.findOne(id);
+    if (cproduit !== undefined && cproduit !== null) {
+      produit.id = (await cproduit).id;
+      return this.produitRepository.save(produit);
+    } else return 'cproduit not found';
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} produit`;
-  }
-
-  update(id: number, updateProduitDto: UpdateProduitDto) {
-    return `This action updates a #${id} produit`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} produit`;
+  async remove(id: number) {
+    const cproduit = this.findOne(id);
+    if (cproduit !== undefined && cproduit !== null) {
+      this.produitRepository.delete((await cproduit).id);
+      return 'cproduit deleted';
+    } else return 'cproduit not found';
   }
 }

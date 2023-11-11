@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CommandeService } from './commande.service';
 import { CreateCommandeDto } from './dto/create-commande.dto';
-import { UpdateCommandeDto } from './dto/update-commande.dto';
+import { Commande } from './entities/commande.entity';
 
 @Controller('commande')
 export class CommandeController {
@@ -23,7 +31,7 @@ export class CommandeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommandeDto: UpdateCommandeDto) {
+  update(@Param('id') id: string, @Body() updateCommandeDto: Commande) {
     return this.commandeService.update(+id, updateCommandeDto);
   }
 
