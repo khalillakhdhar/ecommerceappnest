@@ -32,6 +32,10 @@ export class ReclamationController {
   findOne(@Param('id') id: string) {
     return this.reclamationService.findOne(+id);
   }
+  @Get('/personne/:id')
+  findPersonne(@Param('id') id: string) {
+    return this.reclamationService.findOneWithEmetteur(+id);
+  }
 
   @Patch(':id')
   update(
