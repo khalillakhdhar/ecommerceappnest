@@ -4,6 +4,8 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './entities/client.entity';
+import { validate } from 'class-validator';
+import { CreateClientDto } from './dto/create-client.dto';
 
 @Injectable()
 export class ClientService {
@@ -12,13 +14,26 @@ export class ClientService {
     private clientRepository: Repository<Client>,
   ) {}
 
-  async create(clientData: Partial<Client>): Promise<Client> {
+  async create(clientData: Partial<CreateClientDto>): Promise<Client> {
+    const errors = await validate(clientData);
+    if(errors.length > 0) {
+      return Promise.reject(errors);
+    }
+    else
+    {
     const client = this.clientRepository.create(clientData);
     return await this.clientRepository.save(client);
+    }
   }
 
   async findAll(): Promise<Client[]> {
     return await this.clientRepository.find();
+  }
+  async findCommandes(): Promise<Client[]> {
+    return await this.clientRepository.find({ relations: ['commandes'] });
+  }
+  async findReclamation(): Promise<Client[]> {
+    return await this.clientRepository.find({ relations: ['reclamations'] });
   }
   async findOne(id: number) {
     return await this.clientRepository.findOne({

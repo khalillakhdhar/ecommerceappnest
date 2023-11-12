@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([Commande])],
   controllers: [CommandeController],
   providers: [CommandeService],
+  exports: [CommandeService],
 })
 export class CommandeModule {}

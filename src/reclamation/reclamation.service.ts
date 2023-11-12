@@ -19,6 +19,7 @@ export class ReclamationService {
       reclamationData.emetteur = client;
       return this.reclamationRepository.save(reclamationData);
     });
+    return "erreur d'ajout";
   }
   async findOneWithEmetteur(id: number) {
     return await this.reclamationRepository

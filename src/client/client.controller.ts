@@ -24,6 +24,14 @@ export class ClientController {
   findAll() {
     return this.clientService.findAll();
   }
+  @Get('/reclamations')
+  findReclamation() {
+    return this.clientService.findReclamation();
+  }
+  @Get('/commandes')
+  findCommandes() {
+    return this.clientService.findCommandes();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
